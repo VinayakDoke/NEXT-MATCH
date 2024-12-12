@@ -16,7 +16,12 @@ export default {
                     { 
                         return null
                     }else{
-                        return { email, password }; 
+                        return {
+                            id: user.id, // Ensure `id` is included here
+                            name: user.name,
+                            email: user.email,
+                            image:user.image
+                          };
                     }
                
                 }
@@ -24,3 +29,4 @@ export default {
         }
     })]
 } satisfies NextAuthConfig
+

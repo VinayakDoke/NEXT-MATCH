@@ -86,19 +86,19 @@ export default function UserMenu({ user }: Props) {
           <DropdownItem isReadOnly as="span" className="h-14 flex flex-row" aria-label="username">
             Signed in as {user?.name}
           </DropdownItem>
-          <DropdownItem>
+
+        </DropdownSection>
+        <DropdownItem>
             <Link href="members/edit">
             Edit Profile
             </Link>
           </DropdownItem>
-        
           <DropdownItem>
             <Link href="/auth/logout" >
               Sign Out
             </Link>
           </DropdownItem>
           
-        </DropdownSection>
       </DropdownMenu>
     </Dropdown>
   );

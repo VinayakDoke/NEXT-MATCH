@@ -38,7 +38,8 @@ export async function registerUser(data: RegisterSchema): Promise<ActionResult<U
 
 }
 export async function getUserByEmail(email: string) {
-    return prisma.user.findUnique({ where: { email } })
+    return prisma.user.findUnique({ where: { email }
+     })
 }
 export async function getUserById(email: string) {
     return prisma.user.findUnique({ where: { email } })

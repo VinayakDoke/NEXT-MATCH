@@ -33,7 +33,6 @@ setTimeout(()=>{
     }
    
    }
-   console.log(result) 
   }
   return (
     <Card className='w-2/5 mx-auto'>

@@ -42,7 +42,7 @@ export default function NavBar({ user }: Props) {
     router.push("/auth/login"); // Redirect user to login page after sign-out
   };
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  console.log(user)
+
   const menuItems = [
     "Profile",
     "Dashboard",
