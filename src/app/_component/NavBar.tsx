@@ -12,6 +12,12 @@ import {
 } from "@nextui-org/react";
 import Link from 'next/link'
 import NavLink from "./NavLink";
+import { Session } from "next-auth";
+import { signOut } from "@/auth";
+import UserSession from "./UserSession";
+import { useRouter } from "next/navigation";
+import UserMenu from "./UserMenu";
+
 export const AcmeLogo = () => {
   return (
     <svg fill="none" height="36" viewBox="0 0 32 32" width="36">
@@ -24,10 +30,19 @@ export const AcmeLogo = () => {
     </svg>
   );
 };
+type Props = {
+  user: Session['user'] | null
+}
 
-export default function NavBar() {
+export default function NavBar({ user }: Props) {
+  const router = useRouter();
+  const handleSignOut = async () => {
+
+    await signOut(); // Perform sign-out action
+    router.push("/auth/login"); // Redirect user to login page after sign-out
+  };
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-
+  console.log(user)
   const menuItems = [
     "Profile",
     "Dashboard",
@@ -42,9 +57,9 @@ export default function NavBar() {
   ];
 
   return (
-    <Navbar 
-    className="bg-gradient-to-r from-purple-400 to-purple-700 "
-    isBordered isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
+    <Navbar
+      className="bg-gradient-to-r from-purple-400 to-purple-700 "
+      isBordered isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
       <NavbarContent className="sm:hidden" justify="start">
         <NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"} />
       </NavbarContent>
@@ -55,43 +70,54 @@ export default function NavBar() {
           <p className="font-bold text-inherit">ACME</p>
         </NavbarBrand>
       </NavbarContent>
-   
+
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-      <NavbarBrand  >
-        <span className="text-white">
-          <AcmeLogo /></span>
+        <NavbarBrand  >
+          <span className="text-white">
+            <AcmeLogo /></span>
           <p className="font-bold text-white">ACME</p>
         </NavbarBrand>
-        <NavLink url={'/members'} lable="Matches"/>
-        <NavLink url={'/list'} lable="List"/>
-        <NavLink url={'/message'} lable="Message"/>
-        
+        <NavLink url={'/members'} lable="Matches" />
+        <NavLink url={'/list'} lable="List" />
+        <NavLink url={'/message'} lable="Message" />
+
       </NavbarContent>
 
       <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex text-white">
-          <Link href="/auth/login">Login</Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Button as={Link} variant="bordered" href="/auth/register" className="text-white">
-            Sign Up
+
+
+        {/* <NavbarItem> */}
+        {
+          user ? <UserMenu user={user} /> : <>  <NavbarItem className="hidden lg:flex text-white">
+            <Link href="/auth/login">Login</Link>
+          </NavbarItem>
+            <NavbarItem>
+              <Button as={Link} variant="bordered" href="/auth/register" className="text-white">
+                Sign Up
+              </Button>
+            </NavbarItem></>
+        }
+
+        {/* </NavbarItem> */}
+        {/* <NavbarItem>
+          <Button as={Link} variant="bordered" href="/auth/logout" className="text-white">
+            Sign Out
           </Button>
-        </NavbarItem>
+        </NavbarItem> */}
       </NavbarContent>
 
       <NavbarMenu>
         {menuItems.map((item, index) => (
           <NavbarMenuItem key={`${item}-${index}`}>
             <Link
-              className={`w-full ${
-                index === 2
-                  ? "text-warning"
-                  : index === menuItems.length - 1
+              className={`w-full ${index === 2
+                ? "text-warning"
+                : index === menuItems.length - 1
                   ? "text-danger"
                   : "text-foreground"
-              } text-lg`}
+                } text-lg`}
               href="#"
-            
+
             >
               {item}
             </Link>

@@ -1,15 +1,18 @@
-"use client"
-import React, { useEffect } from 'react'
+
+import React from 'react'
 import BackButton from './BackButton'
+import { auth, signOut } from '@/auth'
+import { json } from 'stream/consumers';
 
-export default function page() {
-
+export default async function page() {
+ 
   return (
     <>
-    <div>page members</div>
-    <BackButton/>
-    
+      
+      <div>page members</div>
+      <BackButton />
+
     </>
-    
+
   )
 }
