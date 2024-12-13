@@ -25,3 +25,23 @@ export async function updateMemberProfile(data: MemberEditSchema): Promise<Actio
         return { status: 'error', error: "Something went" }
     }
 }
+
+export async function addImage(url: string, publicId: string) {
+    try {
+        const userId = await getAuthrisedUserId()
+        return await prisma.member.update({
+            where: { userId },
+            data: {
+                photos: {
+                    create: [
+                        {
+                            url, publicId
+                        }
+                    ]
+                }
+            }
+        })
+    } catch (error) {
+        throw error
+    }
+}
