@@ -5,21 +5,12 @@ import { Photo } from '@prisma/client'
 import React, { useEffect, useState } from 'react'
 
 type Props={
-    userId:string
+    photoList:Photo[]
 }
-export default function PhotoCard({userId}:Props) {
-    const [photoList, setPhotoList] = useState<Photo[]>()
-    useEffect(() => {
-        async function fetchPhotos() {
-            const Result =await getMemberPhotosByUserId(userId)
-           
-            if (Result!=null&& Result!=undefined) { 
-                setPhotoList(Result) 
-            }
-        }
-        fetchPhotos()
-    }, [])
+export default function PhotoCard({photoList}:Props) {
+   
     return (
+        photoList&&
         <Card className="w-full mt-5 h-[80vh]">
             <CardHeader className='text-2xl font-semibold text-secondary'> Photos</CardHeader>
             <Divider />

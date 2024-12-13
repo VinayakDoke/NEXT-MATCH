@@ -1,6 +1,6 @@
 'use server'
 
-import { signIn, signOut } from "@/auth";
+import { auth, signIn, signOut } from "@/auth";
 import { prisma } from "@/lib/Prisma";
 import { LoginSchema } from "@/lib/schemas/loginSchema";
 import { registerSchema, RegisterSchema } from "@/lib/schemas/register";
@@ -69,4 +69,11 @@ export async function SignInUser(data: LoginSchema): Promise<ActionResult<string
 
 export async function UserSignOut() {  
    await signOut();
+}
+
+export async function getAuthrisedUserId(){
+    const session = await auth();
+    const userId = session?.user?.id
+    if (!userId) throw new Error('Unauthorised')
+    return userId
 }

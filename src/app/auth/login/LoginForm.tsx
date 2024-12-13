@@ -10,18 +10,18 @@ import { GiPadlock } from 'react-icons/gi'
 import { toast } from 'react-toastify'
 
 export default function LoginForm() {
-  const router=useRouter()
-  const { register, formState: { errors, isValid,isSubmitting }, handleSubmit } = useForm<LoginSchema>({
-    resolver:zodResolver(loginSchema),
-    mode:'onTouched',
-    shouldFocusError:true
+  const router = useRouter()
+  const { register, formState: { errors, isValid, isSubmitting }, handleSubmit } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
+    mode: 'onTouched',
+    shouldFocusError: true
   })
-  const onSubmit = async(data: LoginSchema) => {
-   
-    const result=await SignInUser(data)
-    if(result.status==="success"){
-router.push('/members')
-    }else{
+  const onSubmit = async (data: LoginSchema) => {
+
+    const result = await SignInUser(data)
+    if (result.status === "success") {
+      router.push('/members')
+    } else {
       toast.error(result.error as string)
     }
   }
@@ -54,9 +54,9 @@ router.push('/members')
               isInvalid={!!errors.password}
               errorMessage={errors?.password?.message as string}
             />
-            <Button 
-            isLoading={isSubmitting}
-            isDisabled={!isValid} fullWidth color='secondary' type={"submit"}>
+            <Button
+              isLoading={isSubmitting}
+              isDisabled={!isValid} fullWidth color='secondary' type={"submit"}>
               Login
             </Button>
           </div>

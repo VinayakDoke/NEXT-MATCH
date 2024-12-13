@@ -8,7 +8,6 @@ export async function getMembers() {
     const session = await auth()
     if (!session?.user) return null
     try {
-
         return prisma.member.findMany(
             {
                 where: {
@@ -19,7 +18,7 @@ export async function getMembers() {
             }
         );
     } catch (error) {
-        console.log(error)
+        throw error
     }
 }
 export async function getMemberByUserId(userId: string) {

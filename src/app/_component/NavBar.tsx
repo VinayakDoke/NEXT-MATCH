@@ -78,7 +78,7 @@ export default function NavBar({ user }: Props) {
           <p className="font-bold text-white">ACME</p>
         </NavbarBrand>
         <NavLink url={'/members'} lable="Matches" />
-        <NavLink url={'/list'} lable="List" />
+        <NavLink url={'/lists'} lable="Lists" />
         <NavLink url={'/message'} lable="Message" />
 
       </NavbarContent>
