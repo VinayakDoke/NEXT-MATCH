@@ -1,8 +1,5 @@
 'use server'
-
-import { auth } from "@/auth";
 import { prisma } from "@/lib/Prisma";
-import { boolean } from "zod"
 import { getAuthrisedUserId } from "./authActions";
 
 export async function toggleLikeMember(targetUserId: string, isLiked: boolean) {

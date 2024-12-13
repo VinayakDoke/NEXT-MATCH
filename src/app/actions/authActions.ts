@@ -5,7 +5,7 @@ import { prisma } from "@/lib/Prisma";
 import { LoginSchema } from "@/lib/schemas/loginSchema";
 import { registerSchema, RegisterSchema } from "@/lib/schemas/register";
 import { ActionResult } from "@/types";
-import { User } from "@prisma/client";
+import { Photo, User } from "@prisma/client";
 import bcrypt from 'bcryptjs'
 import { AuthError } from "next-auth";
 
@@ -76,4 +76,13 @@ export async function getAuthrisedUserId(){
     const userId = session?.user?.id
     if (!userId) throw new Error('Unauthorised')
     return userId
+}
+export async function UpdateUserImage(userId:string,photo:Photo){
+    await prisma.user.update({
+        where: { id: userId },
+        data: {
+            image: photo.url
+        }
+    })
+   
 }

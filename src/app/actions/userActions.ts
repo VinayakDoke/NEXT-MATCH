@@ -1,10 +1,11 @@
 'use server'
 
-import { Member } from "@prisma/client";
+import { User, Member, Photo } from "@prisma/client";
 import { memberEditSchema, MemberEditSchema } from "../members/edit/memberEditSchema";
 import { ActionResult } from "@/types";
-import { getAuthrisedUserId } from "./authActions";
+import { getAuthrisedUserId, UpdateUserImage } from "./authActions";
 import { prisma } from "@/lib/Prisma";
+import { cloudinary } from "@/lib/cloudinary";
 
 export async function updateMemberProfile(data: MemberEditSchema): Promise<ActionResult<Member>> {
     try {
@@ -38,6 +39,38 @@ export async function addImage(url: string, publicId: string) {
                             url, publicId
                         }
                     ]
+                }
+            }
+        })
+    } catch (error) {
+        throw error
+    }
+}
+
+export async function setMainImage(photo: Photo) {
+    try {
+        const userId = await getAuthrisedUserId()
+        await UpdateUserImage(userId, photo)
+        return await prisma.member.update({
+            where: { userId },
+            data: { image: photo.url }
+        })
+    } catch (error) {
+        throw error
+    }
+}
+
+export async function deleteImage(photo: Photo) {
+    const userId = await getAuthrisedUserId();
+    try {
+        if (photo.publicId) {
+            await cloudinary.v2.uploader.destroy(photo.publicId)
+        }
+        return prisma.member.update({
+            where: { userId },
+            data: {
+                photos: {
+                    delete: { id: photo.id }
                 }
             }
         })

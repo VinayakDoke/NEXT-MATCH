@@ -17,9 +17,10 @@ export default function ImageUploadButton({onUploadImage}:Props) {
                 }
                 signatureEndpoint={'/api/sign-image'}
                 uploadPreset='nm-demo'
-                className='flex items-center gap-2 bg-secondary text-white rounded-lg py-2 px-4 hover:bg-secondary/70 mb-3'
+               
+                className='flex items-center gap-2 text-secondary border-purple-900 border-2 rounded-lg py-2 px-4 hover:bg-secondary hover:text-white mb-3  ' 
             >
-                <HiPhoto size={28} />Upload new image
+                <HiPhoto size={28} /><small style={{fontWeight:"normal"}}>Upload new image</small>
             </CldUploadButton>
         </div>
     )

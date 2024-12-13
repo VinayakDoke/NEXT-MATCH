@@ -89,7 +89,7 @@ export default function UserMenu({ user }: Props) {
 
         </DropdownSection>
         <DropdownItem>
-            <Link href="members/edit">
+            <Link href="/members/edit">
             Edit Profile
             </Link>
           </DropdownItem>
