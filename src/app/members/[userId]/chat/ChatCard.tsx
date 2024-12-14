@@ -1,15 +1,42 @@
 'use client'
+import CardinnerWrapper from '@/app/_component/CardinnerWrapper'
 import { Card, CardBody, CardHeader, Divider } from '@nextui-org/react'
 import React from 'react'
+import ChatForm from './ChatForm'
+import { Message } from '@prisma/client'
+import { MessageDto } from '@/types'
+import MessageBox from './MessageBox'
 
-export default function ChatCard() {
+type Props={
+  messages:MessageDto[],
+  userId:string
+}
+
+export default function ChatCard({messages,userId}:Props) {
+
   return (
-    <Card className="w-full mt-5 h-[80vh]">
-      <CardHeader className='text-2xl font-semibold text-secondary'> Chat</CardHeader>
-      <Divider />
-      <CardBody>
-        Chat here
-      </CardBody>
-    </Card>
+    <>
+    <CardinnerWrapper header='Chat'
+    body={<div>{
+      messages?.length===0?<>
+      "No messages to display "
+      </>
+      :
+      <>
+      {
+        messages?.map((message)=>{
+          return(
+            <div key={message.id}>
+<MessageBox message={message} currentUserId={userId}/>
+            </div>
+          )
+        })
+      }
+      </>
+    }
+    </div>}
+    footer={<ChatForm/>}
+    />
+    </>
   )
 }

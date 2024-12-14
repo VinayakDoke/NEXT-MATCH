@@ -15,6 +15,8 @@ export default async function page() {
   const members = await getMembers()
   const likeIds=await fetchCurrentUserLikeIds()
   if (!members) return notFound();
+  const session=await auth();
+  console.log("session",session)
   return (
     <div className='mt-10 grid grid-cols-1 md:grid-cols-2 lg:md:grid-cols-3 xl:md:grid-cols-6 gap-8'>
 

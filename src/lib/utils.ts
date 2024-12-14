@@ -1,4 +1,4 @@
-import { differenceInYears } from 'date-fns';
+import { differenceInYears, format } from 'date-fns';
 import { FieldValues, Path, UseFormSetError } from 'react-hook-form';
 import { ZodIssue } from 'zod';
 
@@ -17,4 +17,7 @@ setError:UseFormSetError<TFieldValues>
       } else {
         setError('root.serverError', { message: errorResponse?.error })
       }
+}
+export function formateShortDateTime(date:Date){
+return format(date,'dd MM yy h:mm:a')
 }

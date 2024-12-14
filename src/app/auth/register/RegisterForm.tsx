@@ -16,7 +16,6 @@ export default function RegisterForm() {
     mode: 'onTouched',
     shouldFocusError: true
   })
-  const [status, setStatus] = useState<string | null>(null);
   const onSubmit = async (data: RegisterSchema) => {
     const result = await registerUser(data);
     if (result.status == "success") {
