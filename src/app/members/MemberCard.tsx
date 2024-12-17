@@ -15,6 +15,7 @@ export default function MemberCard({ member, likeIds }: Props) {
     const hasLiked = likeIds.includes(member.userId)
 
     return (
+        <>
         <Card as={Link} href={`/members/${member.userId}`} fullWidth>
 
             <Image
@@ -43,6 +44,7 @@ export default function MemberCard({ member, likeIds }: Props) {
                 </div>
             </CardFooter>
         </Card>
-
+       
+</>
     )
 }

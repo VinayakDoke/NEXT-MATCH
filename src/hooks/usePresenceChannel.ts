@@ -54,6 +54,7 @@ import { useEffect, useRef } from "react";
 import usePresenceStore from "./usePresenceStore";
 import { Channel, Members } from "pusher-js";
 import { pusherClient } from "@/lib/pusher";
+import { updateLastActive } from "@/app/actions/memberActions";
 
 export const usePresenceChannel = () => {
   // Stable selectors for Zustand store
@@ -69,8 +70,9 @@ export const usePresenceChannel = () => {
       channelRef.current = pusherClient.subscribe("presence-nm");
 
       // Bind events
-      channelRef.current.bind("pusher:subscription_succeeded", (members: Members) => {
+      channelRef.current.bind("pusher:subscription_succeeded", async(members: Members) => {
         set(Object.keys(members.members)); // Set initial members
+        await updateLastActive()
       });
 
       channelRef.current.bind("pusher:member_added", (member: { id: string }) => {

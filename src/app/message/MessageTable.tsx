@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import React, { Key, useCallback, useState } from 'react'
 import { AiFillDelete } from 'react-icons/ai';
 import { deleteMessage } from '../actions/messageActions';
+import PresenceAvatar from '@/components/PresenceAvatar';
 
 type Props = {
     messages: MessageDto[] | []
@@ -14,7 +15,7 @@ export default function MessageTable({ messages }: Props) {
     const isOutbox = searchParams.get('container') == 'outbox';
     const router = useRouter()
     const columns = [
-        { key: isOutbox ? 'recipientName' : 'sendName', label: isOutbox ? 'Recipient' : 'Sender' },
+        { key: isOutbox ? 'recipientName' : 'senderName', label: isOutbox ? 'Recipient' : 'Sender' },
         { key: 'text', label: 'Message' },
         {
             key: 'created', label: isOutbox ? 'Date send' : 'Date received'
@@ -42,9 +43,12 @@ const [isDeleting,setDeleting]=useState({id:"",loading:false})
             case 'senderName':
                 return (
                     <div className={`flex items-center gap-2 cursor-pointer ${!item.dateRead && !isOutbox ? 'font-semibold' : ''}`}>
-                        <Avatar
+                        {/* <Avatar
                             alt='Image of member'
                             src={(!isOutbox ? item.recipientImage : item.senderImage) || '/images/user.png'}
+                        /> */}
+                        <PresenceAvatar userId={isOutbox?item?.recipientId:item?.senderId}
+                        src={isOutbox?item?.recipientImage:item?.senderImage}
                         />
                         <span>{cellValue}</span>
                     </div>

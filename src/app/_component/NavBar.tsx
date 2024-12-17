@@ -17,6 +17,7 @@ import { signOut } from "@/auth";
 import UserSession from "./UserSession";
 import { useRouter } from "next/navigation";
 import UserMenu from "./UserMenu";
+import Filters from "./Filters";
 
 export const AcmeLogo = () => {
   return (
@@ -57,6 +58,7 @@ export default function NavBar({ user }: Props) {
   ];
 
   return (
+    <>
     <Navbar
       className="bg-gradient-to-r from-purple-400 to-purple-700 "
       isBordered isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
@@ -125,6 +127,8 @@ export default function NavBar({ user }: Props) {
         ))}
       </NavbarMenu>
     </Navbar>
+    <Filters/>
+    </>
   );
 }
 

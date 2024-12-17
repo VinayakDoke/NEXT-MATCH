@@ -31,7 +31,6 @@ export default function MessageBox({ message, currentUserId }: Props) {
      function timeAgo(date: string) {
         const parsedDate = parse(date, "dd MM yy hh:mm:a", new Date());
       let sendDate=new Date(parsedDate)
-      console.log("sendDate",sendDate,date)
       if (isNaN(sendDate.getTime())) {
         return "Invalid date";
       }
