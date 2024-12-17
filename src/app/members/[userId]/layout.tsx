@@ -4,10 +4,10 @@ import React, { ReactNode } from 'react'
 import MemberSidebar from '../MemberSidebar';
 
 export default async function Layout({ children, params }: { children: ReactNode, params: { userId: string } }) {
- const userId= params?.userId as string;
+ const userId=params&& params?.userId as string;
  if(!userId)return null
   const member = await getMemberByUserId(userId);
-    const basePath = `/members/${userId}`
+    const basePath =userId&& `/members/${userId}`
     const navLinks = [
       { name: 'Profile', href: `${basePath}` },
       { name: 'Photos', href: `${basePath}/photos` },

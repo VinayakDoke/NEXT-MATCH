@@ -1,5 +1,6 @@
 'use client';
 import LikeButton from '@/components/LikeButton';
+import PresenceDot from '@/components/PresenceDot';
 import { Card, CardFooter, Image } from '@nextui-org/react'
 import { Member } from '@prisma/client'
 import Link from 'next/link'
@@ -23,12 +24,17 @@ export default function MemberCard({ member, likeIds }: Props) {
                 src={member?.image || '/image/user.png'}
                 className='aspect-square object-cover'
             />
-            <div className='absolute top-3 right-3 z-50'
-                onClick={(e) => {
-                    e.preventDefault()
-                }}
-            >
-                <LikeButton targetId={member.userId} hasLiked={hasLiked} />
+            <div onClick={(e) => {
+                e.preventDefault()
+            }}>
+                <div className='absolute top-3 right-3 z-50'
+
+                >
+                    <LikeButton targetId={member.userId} hasLiked={hasLiked} />
+                </div>
+                <div className=' absolute top-2 left-3 z-50'>
+                    <PresenceDot member={member}/>
+                    </div>
             </div>
             <CardFooter className='absolute bottom-0 z-10 bg-dark-gradient'>
                 <div className='flex flex-col text-white'>

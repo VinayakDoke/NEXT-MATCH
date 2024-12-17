@@ -36,6 +36,7 @@ export default function RootLayout({
       >
         
         {/* <Providers> */}
+        <Providers> 
           <ToastContainer position="bottom-right" className='z-50'/>
         {/* <NavBar/> */}
         <ParentNav/>
@@ -43,7 +44,7 @@ export default function RootLayout({
         {children}
         </main>
        
-        {/* </Providers> */}
+        </Providers>
       </body>
     </html>
   );
