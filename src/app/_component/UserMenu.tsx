@@ -94,7 +94,7 @@ export default function UserMenu({ user }: Props) {
             </Link>
           </DropdownItem>
           <DropdownItem>
-            <Link href="/auth/logout" >
+            <Link href="/logout" >
               Sign Out
             </Link>
           </DropdownItem>

@@ -1,11 +1,13 @@
 'use server'
 
 import { auth, signIn, signOut } from "@/auth";
+import { sendVerificationEmail } from "@/lib/mail";
 import { prisma } from "@/lib/Prisma";
 import { LoginSchema } from "@/lib/schemas/loginSchema";
 import { registerSchema, RegisterSchema } from "@/lib/schemas/register";
+import { generateToken, getTokenByEmail } from "@/lib/tokens";
 import { ActionResult } from "@/types";
-import { Photo, User } from "@prisma/client";
+import { Photo, TokenType, User } from "@prisma/client";
 import bcrypt from 'bcryptjs'
 import { AuthError } from "next-auth";
 
@@ -38,20 +40,34 @@ export async function registerUser(data: RegisterSchema): Promise<ActionResult<U
 
 }
 export async function getUserByEmail(email: string) {
-    return prisma.user.findUnique({ where: { email }
-     })
+    return prisma.user.findUnique({
+        where: { email }
+    })
 }
 export async function getUserById(email: string) {
     return prisma.user.findUnique({ where: { email } })
 }
 export async function SignInUser(data: LoginSchema): Promise<ActionResult<string>> {
     try {
+        const existingUser = await getUserByEmail(data.email)
+        if (!existingUser || !existingUser.email) {
+            return { status: 'error', error: 'Invalid credential' }
+        }
+        if (!existingUser.emailVerified) {
+            const token = await generateToken(existingUser.email, TokenType.VERIFICATION);
+            await sendVerificationEmail(token.email, token.token)
+            return {
+                status: 'error',
+                error: 'Please verify your email address before loggin in'
+            }
+        }
+
         const result = await signIn('credentials', {
             email: data.email,
             password: data.password,
             redirect: false
         })
-       
+
         return { status: "success", data: "Logged in" }
     } catch (error) {
         if (error instanceof AuthError) {
@@ -67,22 +83,53 @@ export async function SignInUser(data: LoginSchema): Promise<ActionResult<string
     }
 }
 
-export async function UserSignOut() {  
-   await signOut();
+export async function UserSignOut() {
+    await signOut();
 }
 
-export async function getAuthrisedUserId(){
+export async function getAuthrisedUserId() {
     const session = await auth();
     const userId = session?.user?.id
     if (!userId) throw new Error('Unauthorised')
     return userId
 }
-export async function UpdateUserImage(userId:string,photo:Photo){
+
+export async function UpdateUserImage(userId: string, photo: Photo) {
     await prisma.user.update({
         where: { id: userId },
         data: {
             image: photo.url
         }
     })
+
+}
+
+export async function verifyEmail(token: string): Promise<ActionResult<string>> {
+    try {
+        const existingToken = await getTokenByEmail(token);
+        if (!existingToken) {
+            return { status: 'error', error: 'Invalid token' }
+        }
+        const hasExpired = new Date() > existingToken.expires;
+        if (hasExpired) {
+            return { status: 'error', error: 'Token has expired' }
+        }
+        const existingUser=await getUserByEmail(existingToken.email)
+        if(!existingUser){
+            return { status: 'error', error: 'User not found' }
+        }
+        await prisma.user.update({
+            where:{id:existingUser.id},
+            data:{
+                emailVerified:new Date()
+            }
+        })
+        await prisma.token.delete({
+            where:{id:existingToken.id}
+        })
+        return {status:'success',data:'Success'}
    
+    } catch (error) {
+    return { status: 'error', error: 'Something went wrong' }
+}
 }

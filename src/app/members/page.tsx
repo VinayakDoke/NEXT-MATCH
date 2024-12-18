@@ -6,10 +6,11 @@ import MemberCard from './MemberCard';
 import { notFound } from 'next/navigation';
 import { fetchCurrentUserLikeIds } from '../actions/likeActions';
 import PaginationComponent from '../_component/PaginationComponent';
-import { UserFilters } from '@/types';
+import { GetMemberParams, UserFilters } from '@/types';
 
-export default async function page({searchParams}:{searchParams:UserFilters}) {
+export default async function page({searchParams}:{searchParams:GetMemberParams}) {
   const members = await getMembers(searchParams)
+  console.log("members",members)
   const likeIds=await fetchCurrentUserLikeIds()
   if (!members) return notFound();
   const session=await auth();

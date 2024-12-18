@@ -40,7 +40,7 @@ export default function NavBar({ user }: Props) {
   const handleSignOut = async () => {
 
     await signOut(); // Perform sign-out action
-    router.push("/auth/login"); // Redirect user to login page after sign-out
+    router.push("/login"); // Redirect user to login page after sign-out
   };
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
@@ -91,21 +91,15 @@ export default function NavBar({ user }: Props) {
         {/* <NavbarItem> */}
         {
           user ? <UserMenu user={user} /> : <>  <NavbarItem className="hidden lg:flex text-white">
-            <Link href="/auth/login">Login</Link>
+            <Link href="/login">Login</Link>
           </NavbarItem>
             <NavbarItem>
-              <Button as={Link} variant="bordered" href="/auth/register" className="text-white">
+              <Button as={Link} variant="bordered" href="/register" className="text-white">
                 Sign Up
               </Button>
             </NavbarItem></>
         }
 
-        {/* </NavbarItem> */}
-        {/* <NavbarItem>
-          <Button as={Link} variant="bordered" href="/auth/logout" className="text-white">
-            Sign Out
-          </Button>
-        </NavbarItem> */}
       </NavbarContent>
 
       <NavbarMenu>

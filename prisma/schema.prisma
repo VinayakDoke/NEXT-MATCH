@@ -29,15 +29,16 @@ model Account {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  passwordHash  String
-  accounts      Account[]
-  member        Member?
-  sessions      Session[]
+  id              String    @id @default(cuid())
+  name            String?
+  email           String?   @unique
+  emailVerified   DateTime?
+  profileComplete Boolean   @default(false)
+  image           String?
+  passwordHash    String
+  accounts        Account[]
+  member          Member?
+  sessions        Session[]
 }
 
 model Session {
@@ -102,4 +103,19 @@ model Message {
   dateRead         DateTime?
   sederDeleted     Boolean   @default(false)
   recipientDeleted Boolean   @default(false)
+}
+
+model Token {
+  id      String    @id @default(cuid())
+  email   String
+  token   String
+  expires DateTime
+  type    TokenType
+
+  @@unique([email, token])
+}
+
+enum TokenType {
+  VERIFICATION
+  PASSWORD_RESET
 }

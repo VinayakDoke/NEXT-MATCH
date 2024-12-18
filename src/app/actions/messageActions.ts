@@ -105,18 +105,32 @@ export async function getMessageThread(recipientId: string) {
 }
 
 export async function getMessageByContainer(container: string) {
+   let cursor:string|null
+   let limit:number=2
+
     try {
         const userId = await getAuthrisedUserId()
         const selector = container === 'outbox' ? 'senderId' : 'recipientId'
         const messages = await prisma.message.findMany({
             where: {
-                [selector]: userId
+                [selector]: userId,
+                // ...(cursor?{created:{lte:new Date(cursor)}}:{})
             }, orderBy: {
                 created: 'asc'
             },
-            select: messageSelect
+            select: messageSelect,
+            //take:limit+1
         })
+        let nextcursor:string|undefined
+        if(messages.length>limit){
+            const nextItem=messages.pop()
+            nextcursor=nextItem?.created?.toISOString()
+        }else{
+            nextcursor=undefined
+        }
         return messages.map((message) => mapMessageToMessageDto(message))
+   
+   
     } catch (error) {
         throw error
     }
